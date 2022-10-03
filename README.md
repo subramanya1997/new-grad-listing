@@ -1,4 +1,4 @@
-# New-Grad-Openings
+# New Grad Openings
 A project to pull all the new grad openings and make it easier to search. 
 
 ## Requirements
