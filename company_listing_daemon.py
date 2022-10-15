@@ -89,6 +89,8 @@ if __name__ == "__main__":
     save company data to companies db 
     """
     for data in tqdm(jdata):
+        if "company" not in data:
+            continue
         _company_name = data["company"]
         if args.year is not None:
             if args.year not in data["yr"]:

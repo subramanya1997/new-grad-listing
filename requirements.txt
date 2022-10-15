@@ -6,3 +6,4 @@ requests
 uuid
 pandas
 tqdm
+selenium
