@@ -44,16 +44,27 @@ def get_listings_for_lever_co(browser, url, company_data):
         "jobs": []
     }
     for _ele in _eles:
-        _title = _ele.find_element(By.TAG_NAME, 'h5').text
-        _location = _ele.find_element(By.CSS_SELECTOR, '.sort-by-location').text
-        _link = _ele.find_element(By.CSS_SELECTOR, '.posting-title').get_attribute('href')
-        _team = ""
         _job_listing_data = {
-            "title": _title,
-            "location": _location,
-            "link": _link,
-            "team": _team,
+            "title": None,
+            "location": None,
+            "link": None,
+            "team": None,
         }
+        try:
+            _title = _ele.find_element(By.TAG_NAME, 'h5').text
+            _job_listing_data["title"] = _title
+        except:
+            pass
+        try:
+            _location = _ele.find_element(By.CSS_SELECTOR, '.sort-by-location').text
+            _job_listing_data["location"] = _location
+        except:
+            pass
+        try:
+            _link = _ele.find_element(By.CSS_SELECTOR, '.posting-title').get_attribute('href')
+            _job_listing_data["link"] = _link
+        except:
+            pass
         try:
             _team = _ele.find_element(By.CSS_SELECTOR, '.sort-by-team').text
             _job_listing_data["team"] = _team
