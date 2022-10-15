@@ -91,7 +91,7 @@ if __name__ == "__main__":
     for data in tqdm(jdata):
         if "company" not in data:
             continue
-        _company_name = data["company"]
+        _company_name = data["company"].strip()
         if args.year is not None:
             if args.year not in data["yr"]:
                 continue

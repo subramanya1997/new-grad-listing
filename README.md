@@ -10,7 +10,8 @@ Install via requirements:
 ## Get companies data
 Get the list of companies from [levels.fyi](www.levels.fyi/) and store it in data/companies.db 
 ```bash
- python company_listing_daemon.py -y 2022
+ python company_listing_daemon.py
+ python job_listing_daemon.py
 ```
 
 ## To-do 
