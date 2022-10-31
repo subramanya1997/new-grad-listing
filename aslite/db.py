@@ -102,6 +102,7 @@ flag='r': open for read-only
 # stores info about papers, and also their lighter-weight metadata
 COMPANIES_DB_FILE = os.path.join(DATA_DIR, 'companies.db')
 LISTING_DB_FILE = os.path.join(DATA_DIR, 'listings.db')
+ANALYTICS_DB_FILE = os.path.join(DATA_DIR, 'analytics.db')
 
 def delete_dbs():
     os.remove(COMPANIES_DB_FILE)
@@ -115,4 +116,9 @@ def get_companies_db(flag='r', autocommit=True):
 def get_job_listings_db(flag='r', autocommit=True):
     assert flag in ['r', 'c']
     pdb = CompressedSqliteDict(LISTING_DB_FILE, tablename='listings', flag=flag, autocommit=autocommit)
+    return pdb
+
+def get_analytics_db(flag='r', autocommit=True):
+    assert flag in ['r', 'c']
+    pdb = CompressedSqliteDict(ANALYTICS_DB_FILE, tablename='analytics', flag=flag, autocommit=autocommit)
     return pdb
