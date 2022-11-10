@@ -103,6 +103,7 @@ flag='r': open for read-only
 COMPANIES_DB_FILE = os.path.join(DATA_DIR, 'companies.db')
 LISTING_DB_FILE = os.path.join(DATA_DIR, 'listings.db')
 ANALYTICS_DB_FILE = os.path.join(DATA_DIR, 'analytics.db')
+DICT_DB_FILE = os.path.join(DATA_DIR, 'dict.db')
 
 def delete_dbs():
     os.remove(COMPANIES_DB_FILE)
@@ -122,3 +123,8 @@ def get_analytics_db(flag='r', autocommit=True):
     assert flag in ['r', 'c']
     pdb = CompressedSqliteDict(ANALYTICS_DB_FILE, tablename='analytics', flag=flag, autocommit=autocommit)
     return pdb
+
+def get_last_active_db(flag='r', autocommit=True):
+    assert flag in ['r', 'c']
+    ladb = SqliteDict(DICT_DB_FILE, tablename='last_active', flag=flag, autocommit=autocommit)
+    return ladb

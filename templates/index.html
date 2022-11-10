@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block variables %}
+<script>
+var gvars = {{ gvars | tojson }};
+
+/*
+JS code here handles pagination. I really don't super love this approach,
+if anyone can think of a cleaner / shorter way please let me know.
+*/
+var move_page = function(int_offset) {
+    var queryParams = new URLSearchParams(window.location.search);
+    queryParams.set("page_number", Math.max(1, parseInt(gvars.page_number) + int_offset));
+    window.location.href = '/?' + queryParams.toString();
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+{% if not user %}
+<div id="log-fun-warn">(hi! just btw you have to be logged in to be able to add/delete/curate tags for papers and get recommendations)</div>
+{% endif %}
+
+<div id="controls">
+    <div>
+
+        <!-- the choice box, allowing us to sort, rank, slice and dice papers -->
+        <div id="cbox">
+            <form action="/" method="get">
+                <input type="submit" value="Submit">
+            </form>
+        </div> -->
+        <!-- some hand-coded common choices for faster and more convenient operation -->
+        <div id="cbox_fast">
+            Shortcuts:
+            <a href="/?rank=tags&tags=all&time_filter=7&skip_have=yes">recommend over last week</a>
+            <a href="/?rank=tags&tags=all&time_filter=3&skip_have=yes">recommend over last 3 days</a>
+            <a href="/?rank=time">recent</a>
+            <a href="/?rank=random&time_filter=7">random last week</a>
+        </div>
+    </div>
+    <div>
+
+    </div>
+</div>
+
+{% if user and tags %}
+<div id="tagwrap">
+</div>
+{% endif %}
+
+{% if user and words %}
+<div id="wordwrap" style="display:none;">
+</div>
+{% endif %}
+
+<!-- main content showing all the papers as a list -->
+<div id="wrap">
+</div>
+
+<!-- links to previous and next pages -->
+<div id="pagination">
+    <span id="link-prev-page" onclick='move_page(-1);'>prev</span>
+    <span>current page: {{ gvars.page_number }} </span>
+    <span id="link-next-page" onclick='move_page(1);'>next</span>
+</div>
+{% endblock %}
+
+{% block elements %}
+<!-- <script src="{{ url_for('static', filename='paper_list.js') }}" type="text/babel"></script>
+<script src="{{ url_for('static', filename='word_list.js') }}" type="text/babel"></script> -->
+{% endblock %}
