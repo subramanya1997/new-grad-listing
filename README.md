@@ -11,12 +11,13 @@ Install via requirements:
 Get the list of companies from [levels.fyi](www.levels.fyi/) and store it in data/companies.db 
 ```bash
  python company_listing_daemon.py
+ python analyst_rating_daemon.py
  python job_listing_daemon.py
 ```
 
 ## To-do 
 * [x] Get companies data.
-* [ ] Get job listing from each company. (Current number of companies it can fetch from 250)
+* [ ] Get job listing from each company. (Current number of companies it can fetch from 250 companies)
 * [ ] Filter data for new grad postions.
 * [ ] Build a website to show these listings
-* [ ] Chrome extension to auto fill. [Extention Page](chrome_extention/)
+* [ ] Chrome extension to auto fill. [(Extention Code)](chrome_extention/)
