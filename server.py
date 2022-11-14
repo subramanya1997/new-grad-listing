@@ -44,6 +44,7 @@ def before_request():
 
     # record activity on this user so we can reserve periodic
     # recommendations heavy compute only for active users
+    print(g.user)
     if g.user:
         with get_last_active_db(flag='c') as last_active_db:
             last_active_db[g.user] = int(time.time())
@@ -58,7 +59,7 @@ def default_context():
     context['user'] = g.user if g.user is not None else ''
     return context
 
-@app.route('/', methods=['GET'])
+@app.route('/')
 def main():
     page_number = 1
 
@@ -67,3 +68,13 @@ def main():
     context['gvars']['page_number'] = str(page_number)
 
     return render_template('index.html', **context)
+
+@app.route('/about')
+def about():
+    context = default_context()
+    return render_template('about.html', **context)
+
+@app.route('/stats')
+def stats():
+    context = default_context()
+    return render_template('stats.html', **context)
