@@ -25,29 +25,47 @@ function main(){
     }
 
     function fill_text_field(field){
-        console.log("Filling text field");
         field.labels.forEach(label => {
-            for(var key in resume_json['text']){
+            for(var key in resume_json){
                 if(label.innerText.toLowerCase().includes(key.toLowerCase())){
-                    console.log("---", label.innerText.toLowerCase(), key, resume_json['text'][key]);
-                    field.value = resume_json['text'][key];
-                    break;
+                    field.value = resume_json[key];
+                    return;
                 }
             }
         });
+        field.labels.forEach(label => {
+            console.log(label.innerText)
+        });
+    }
+
+    function fill_select_field(field){
+        for(var key in resume_json){
+            if (field.parentNode.parentNode.innerText.toLowerCase().includes(key.toLowerCase())){
+                if (Array.isArray(resume_json[key])){
+                    resume_json[key].forEach(value => {
+                        if (field.parentNode.innerText.toLowerCase().includes(value.toLowerCase())){
+                            field.checked = true;
+                        }
+                    });
+                }else{
+                    if (field.parentNode.innerText.toLowerCase().trim() == resume_json[key].toLowerCase().trim()){
+                        field.checked = true;
+                    }
+                }
+            }
+        }
     }
 
     function fill_form(){
         console.log("Filling form");
         form = get_form();
-        // console.log(Array.from(form.elements));
         Array.from(form.elements).forEach(element => {
             if(element != null && element.type != 'hidden') {
                 if (element.type == "text" || element.type == "email" ){
                     fill_text_field(element);
                 }
                 else if (element.type == "radio" || element.type == "checkbox"){
-                    // console.log(element);
+                    fill_select_field(element);
                 }
                 else if (element.type == "fieldset"){
                     // console.log(element);

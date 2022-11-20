@@ -1,21 +1,17 @@
 {
-    "text": {
-        "first name": "Subramanya",
-        "last name": "Nagabhushanaradhya",
-        "full name": "Subramanya Nagabhushanaradhya",
-        "email": "snagabhushan@umass.edu",
-        "phone": "4134253245",
-        "address": "151 Brittany Manor Dr",
-        "city": "Amherst",
-        "state": "Masschusetts",
-        "linkedin": "https://www.linkedin.com/in/nsubramanya",
-        "github": "https://github.com/subramanya1997",
-        "website": "https://subramanya1997.github.io/"
-    },
-    "radio": {
-        "require sponsorship": "Yes",
-        "authorized to work": "Yes",
-        "race": ["Asian", "South Asian", "Indian"],
-        "gender": "Male"
-    }
+    "first name": "Subramanya",
+    "last name": "Nagabhushanaradhya",
+    "full name": "Subramanya Nagabhushanaradhya",
+    "email": "snagabhushan@umass.edu",
+    "phone": "4134253245",
+    "address": "151 Brittany Manor Dr",
+    "city": "Amherst",
+    "state": "Masschusetts",
+    "linkedin": "https://www.linkedin.com/in/nsubramanya",
+    "github": "https://github.com/subramanya1997",
+    "website": "https://subramanya1997.github.io/",
+    "require sponsorship": "Yes",
+    "authorized to work": "Yes",
+    "race": ["Asian", "South Asian"],
+    "gender": "Male"
 }
