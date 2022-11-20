@@ -20,7 +20,6 @@ function main(){
 
     function get_form(){
         var form = document.forms[0];
-        console.log(form);
         return form;
     }
 
@@ -29,27 +28,53 @@ function main(){
             for(var key in resume_json){
                 if(label.innerText.toLowerCase().includes(key.toLowerCase())){
                     field.value = resume_json[key];
-                    return;
+                    break;
                 }
             }
         });
-        field.labels.forEach(label => {
-            console.log(label.innerText)
-        });
+    }
+
+    function recursive_update(prevText, selectedText, _field){
+        for(var i =0; i < _field.children.length; i++){
+            if (prevText == _field.children[i].innerText){
+                if (_field.children[i].innerHTML != prevText){
+                    recursive_update(prevText, selectedText, _field.children[i]);
+                }else{
+                    _field.children[i].innerHTML = selectedText;
+                }
+            }
+            
+        }
     }
 
     function fill_select_field(field){
         for(var key in resume_json){
-            if (field.parentNode.parentNode.innerText.toLowerCase().includes(key.toLowerCase())){
-                if (Array.isArray(resume_json[key])){
-                    resume_json[key].forEach(value => {
-                        if (field.parentNode.innerText.toLowerCase().includes(value.toLowerCase())){
+            if (field.parentNode.parentNode.innerText.toLowerCase().includes(key.toLowerCase()) || field.parentNode.innerText.toLowerCase().includes(key.toLowerCase())){
+                if (field.type == "select-one"){
+                    for(var i = 0; i < field.options.length; i++){
+                        if(field.options[i].text.toLowerCase().includes(resume_json[key].toLowerCase())){
+                            for(var j = 0; j < field.parentNode.children.length; j++){
+                                if (field.parentNode.children[j] != field && field.parentNode.children[j].innerText == field.options[field.options.selectedIndex].text){
+                                    recursive_update(field.options[field.options.selectedIndex].text, field.options[i].text, field.parentNode.children[j]);
+                                    break;
+                                }
+                            }
+                            field.options[i].selected = true;
+                            break;
+                        }
+                    }
+                }
+                else if (field.type == "checkbox"){
+                    if (Array.isArray(resume_json[key])){
+                        resume_json[key].forEach(value => {
+                            if (field.parentNode.innerText.toLowerCase().includes(value.toLowerCase())){
+                                field.checked = true;
+                            }
+                        });
+                    }else{
+                        if (field.parentNode.innerText.toLowerCase().trim() == resume_json[key].toLowerCase().trim()){
                             field.checked = true;
                         }
-                    });
-                }else{
-                    if (field.parentNode.innerText.toLowerCase().trim() == resume_json[key].toLowerCase().trim()){
-                        field.checked = true;
                     }
                 }
             }
@@ -59,12 +84,13 @@ function main(){
     function fill_form(){
         console.log("Filling form");
         form = get_form();
+        console.log(Array.from(form.elements));
         Array.from(form.elements).forEach(element => {
             if(element != null && element.type != 'hidden') {
                 if (element.type == "text" || element.type == "email" ){
                     fill_text_field(element);
                 }
-                else if (element.type == "radio" || element.type == "checkbox"){
+                else if (element.type == "radio" || element.type == "checkbox" || element.type == "select-one"){
                     fill_select_field(element);
                 }
                 else if (element.type == "fieldset"){
@@ -78,10 +104,9 @@ function main(){
     }
 
     function resume_task(){
-        console.log("Resuming task");
-        fill_form();
-        console.log(resume_json);
-        console.log(resume_file);
+        if (resume_json != null && resume_file != null){
+            fill_form();
+        }
     }
 
     async function get_user_resume(url){
@@ -91,25 +116,22 @@ function main(){
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 resume_json = JSON.parse(xhr.responseText);
+                get_resume_pdf();
+            }
+        }
+    }
+
+    async function get_resume_pdf(url){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                resume_file = JSON.parse(xhr.responseText);
                 resume_task();
             }
         }
     }
 
     get_user_resume("https://raw.githubusercontent.com/subramanya1997/new-grad-listing/main/chrome_extention/assets/data.json");
-    // Array.from(document.forms[0].elements).forEach(element => {
-    //     if(element != null && element.type != 'hidden') {
-    //         element.labels.forEach(label => {
-    //             _label = label.innerText.replace(/(\r\n*|\n*|\r)/gm, "");
-    //             if (label.innerText.includes('Full name')) {
-    //                 element.value = 'John Doe';
-    //             }
-    //             if (label.innerText.includes('Email')) {
-    //                 element.value = 'snagabhushan@umass.edu';
-    //             }
-                
-    //         });
-    //     }
-    // });
 }
-
