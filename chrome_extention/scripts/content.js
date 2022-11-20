@@ -27,11 +27,10 @@ function main(){
     function fill_text_field(field){
         console.log("Filling text field");
         field.labels.forEach(label => {
-            console.log(label.innerText);
             for(var key in resume_json['text']){
-                console.log(key);
                 if(label.innerText.toLowerCase().includes(key.toLowerCase())){
-                    field.value = resume_json[key];
+                    console.log("---", label.innerText.toLowerCase(), key, resume_json['text'][key]);
+                    field.value = resume_json['text'][key];
                     break;
                 }
             }
@@ -43,7 +42,6 @@ function main(){
         form = get_form();
         // console.log(Array.from(form.elements));
         Array.from(form.elements).forEach(element => {
-            console.log(element.type);
             if(element != null && element.type != 'hidden') {
                 if (element.type == "text" || element.type == "email" ){
                     fill_text_field(element);
