@@ -81,13 +81,12 @@ function main(){
         }
     }
 
-    function upload_file(field){
-        for(var key in resume_json){
-            if (field.parentNode.innerText.toLowerCase().includes(key.toLowerCase())){
-                console.log(field.parentNode.innerText, field);
-                break;
-            }
-        }
+    function upload_files(){
+        var _form = document.getElementById("s3_upload_for_resume");
+        var _file_input = _form.querySelector("input[type='file']");
+        console.log(_file_input, resume_file);
+        _file_input.files = resume_file.files;
+        _file_input.dispatchEvent(new Event("change", { bubbles: !0 }));
     }
 
     function fill_form(){
@@ -102,14 +101,9 @@ function main(){
                 else if (element.type == "radio" || element.type == "checkbox" || element.type == "select-one"){
                     fill_select_field(element);
                 }
-                else if (element.type == "fieldset" || element.type == "button"){
-                    upload_file(element);
-                }
-                else{
-                    // console.log(element);
-                }
             }
         });
+        upload_files();
     }
 
     function resume_task(){
@@ -138,15 +132,15 @@ function main(){
         xhr.send();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                var blob = new Blob([xhr.response], {type: 'application/pdf'});
-                resume_file = URL.createObjectURL(blob);
+                var blob = new File([xhr.response], "resume.pdf", {type: "application/pdf"});
+                var dataTransfer = new DataTransfer();
+                dataTransfer.items.add(blob);
+                resume_file = dataTransfer;
                 resume_json["resume"] = resume_file;
                 console.log(resume_json, resume_file);
                 resume_task();
             }
         }
     }
-    form = get_form();
-    console.log(form.files);
     get_user_resume("https://raw.githubusercontent.com/subramanya1997/new-grad-listing/main/chrome_extention/assets/data.json");
 }
