@@ -94,7 +94,7 @@ function main(){
                     fill_select_field(element);
                 }
                 else if (element.type == "fieldset"){
-                    // console.log(element);
+                    console.log(element);
                 }
                 else{
                     // console.log(element);
@@ -121,14 +121,18 @@ function main(){
         }
     }
 
-    async function get_resume_pdf(url){
+    async function get_resume_pdf(){
+        var url = resume_json["resume_url"];
+        form = get_form();
+        console.log(url)
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.send();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                resume_file = JSON.parse(xhr.responseText);
-                resume_task();
+                console.log(xhr.response);
+                // resume_file = JSON.parse(xhr.responseText);
+                // resume_task();
             }
         }
     }
