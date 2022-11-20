@@ -81,6 +81,15 @@ function main(){
         }
     }
 
+    function upload_file(field){
+        for(var key in resume_json){
+            if (field.parentNode.innerText.toLowerCase().includes(key.toLowerCase())){
+                console.log(field.parentNode.innerText, field);
+                break;
+            }
+        }
+    }
+
     function fill_form(){
         console.log("Filling form");
         form = get_form();
@@ -93,8 +102,8 @@ function main(){
                 else if (element.type == "radio" || element.type == "checkbox" || element.type == "select-one"){
                     fill_select_field(element);
                 }
-                else if (element.type == "fieldset"){
-                    console.log(element);
+                else if (element.type == "fieldset" || element.type == "button"){
+                    upload_file(element);
                 }
                 else{
                     // console.log(element);
@@ -123,19 +132,21 @@ function main(){
 
     async function get_resume_pdf(){
         var url = resume_json["resume_url"];
-        form = get_form();
-        console.log(url)
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
+        xhr.responseType = 'blob';
         xhr.send();
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                console.log(xhr.response);
-                // resume_file = JSON.parse(xhr.responseText);
-                // resume_task();
+                var blob = new Blob([xhr.response], {type: 'application/pdf'});
+                resume_file = URL.createObjectURL(blob);
+                resume_json["resume"] = resume_file;
+                console.log(resume_json, resume_file);
+                resume_task();
             }
         }
     }
-
+    form = get_form();
+    console.log(form.files);
     get_user_resume("https://raw.githubusercontent.com/subramanya1997/new-grad-listing/main/chrome_extention/assets/data.json");
 }
