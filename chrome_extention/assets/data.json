@@ -8,11 +8,15 @@
     "address": "151 Brittany Manor Dr",
     "city": "Amherst",
     "state": "Masschusetts",
+    "zip": "01002",
     "linkedin": "https://www.linkedin.com/in/nsubramanya",
     "github": "https://github.com/subramanya1997",
+    "portfolio": "https://subramanya1997.github.io/",
     "website": "https://subramanya1997.github.io/",
-    "require sponsorship": "Yes",
+    "sponsorship": "Yes",
     "authorized to work": "Yes",
+    "relocate": "Yes",
     "race": ["Asian", "South Asian"],
-    "gender": "Male"
+    "gender": "Male", 
+    "Veteran": "not a protected veteran"
 }
