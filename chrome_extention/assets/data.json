@@ -18,5 +18,6 @@
     "relocate": "Yes",
     "race": ["Asian", "South Asian"],
     "gender": "Male", 
-    "Veteran": "not a protected veteran"
+    "Veteran": "not a protected veteran",
+    "disability": "don't have a disability"
 }

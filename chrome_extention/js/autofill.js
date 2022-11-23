@@ -11,36 +11,32 @@ class AutoFill {
 
     get_forms(){
         this.forms = document.forms;
-        console.log(this.forms);
         this.form = document.forms[0];
     }
 
-    fill_text_field(field){
-        field.labels.forEach(label => {
-            for(var key in this.resume_json){
-                if(label.innerText.toLowerCase().includes(key.toLowerCase())){
-                    field.value = this.resume_json[key];
-                    field.dispatchEvent(new Event("change", { bubbles: !0, cancelable: !1 }));
-                    break;
-                }
+    fill_text_field(field, label){
+        for(var key in this.resume_json){
+            if (label.toLowerCase().includes(key.toLowerCase())){
+                field.value = this.resume_json[key];
+                field.dispatchEvent(new Event("change", { bubbles: !0, cancelable: !1 }));
+                return;
             }
-        });
+        }
     }
 
-    fill_select_field(field){
+    fill_select_field(field, label){
         for(var key in this.resume_json){
-            if (field.parentNode.parentNode.innerText.toLowerCase().includes(key.toLowerCase()) || field.parentNode.innerText.toLowerCase().includes(key.toLowerCase())){
+            if (label.toLowerCase().includes(key.toLowerCase())){
                 if (field.type == "select-one"){
                     for(var i = 0; i < field.options.length; i++){
                         if(field.options[i].text.toLowerCase().includes(this.resume_json[key].toLowerCase())){
-                            console.log();
                             field.options[i].selected = true;
                             field.options[i].dispatchEvent(new Event("change", { bubbles: !0, cancelable: !1 }));
                             break;
                         }
                     }
                 }
-                else if (field.type == "checkbox"){
+                else {
                     if (Array.isArray(this.resume_json[key])){
                         this.resume_json[key].forEach(value => {
                             if (field.parentNode.innerText.toLowerCase().includes(value.toLowerCase())){
@@ -60,10 +56,12 @@ class AutoFill {
     }
 
     upload_files(){
-        console.log(this.job_portal_type);
         switch(this.job_portal_type){
             case CompanyType.greenhouse:
                 this.upload_greenhouse();
+                break;
+            case CompanyType.lever:
+                this.upload_lever();
                 break;
         }   
         
@@ -71,16 +69,29 @@ class AutoFill {
 
     fill_resume() {
         this.get_forms();
-        Array.from(this.form.elements).forEach(element => {
-            if(element != null && element.type != 'hidden') {
-                if (element.type == "text" || element.type == "email" ){
-                    this.fill_text_field(element);
-                }
-                else if (element.type == "radio" || element.type == "checkbox" || element.type == "select-one"){
-                    this.fill_select_field(element);
+        var labels = this.form.getElementsByTagName("label");
+        for (var i = 0; i < labels.length; i++) {
+            var label = labels[i].parentNode.innerText.split("\n")[0]
+            var elements = labels[i].parentNode.getElementsByTagName("input");
+            for(var j = 0; j < elements.length; j++){
+                var element = elements[j];
+                if(element != null && element.type != 'hidden') {
+                    if (element.type == "text" || element.type == "email"){
+                        this.fill_text_field(element, label);
+                    }
+                    else if (element.type == "radio" || element.type == "checkbox"){
+                        this.fill_select_field(element, label);
+                    }
                 }
             }
-        });
+            var elements = labels[i].parentNode.getElementsByTagName("select");
+            for(var j = 0; j < elements.length; j++){
+                var element = elements[j];
+                if(element != null && element.type != 'hidden') {
+                    this.fill_select_field(element, label);
+                }
+            }
+        }
         this.upload_files();
     }
 
@@ -106,5 +117,20 @@ class AutoFill {
             _file_input.files = this.cover_letter.files;
             _file_input.dispatchEvent(new Event("change", { bubbles: !0, cancelable: !1 }));
         }
+    }
+
+    upload_lever() {
+        Array.from(this.form.elements).forEach(element => {
+            // Upload resume
+            if (element.type == "file" && element.name == "resume"){
+                element.files = this.resume_file.files;
+                element.dispatchEvent(new Event("change", { bubbles: !0, cancelable: !1 }));
+            }
+            // Upload cover letter
+            if (element.type == "file" && element.name == "coverLetter"){
+                element.files = this.cover_letter.files;
+                element.dispatchEvent(new Event("change", { bubbles: !0, cancelable: !1 }));
+            }
+        });
     }
 }

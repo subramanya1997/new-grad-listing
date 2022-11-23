@@ -6,7 +6,6 @@ class UserData{
         this.cover_letter = null;
         this.exeManager = exeManager
         this.get_user_data(this.user_data_url);
-
     }
 
     async get_resume_pdf(url){
